@@ -38,10 +38,12 @@ module.exports = function(mongoose, cache, debug) {
         exec
           .call(this)
           .then(results => {
-            cache.set(key, results, ttl, () => {
-              callback(null, results);
-              return resolve(results);
-            })
+            if(results) {
+              cache.set(key, results, ttl, function () {});
+            }
+
+            callback(null, results);
+            return resolve(results);
           })
           .catch(err => {
             callback(err);
